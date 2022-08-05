@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
@@ -27,6 +28,20 @@ public class HomeController {
 
     // 로그인 정보까지 처리 되는 홈 화면
     @GetMapping("/")
+    public String homeLoginV3(HttpServletRequest request, Model model) {
+
+        // session 은 메모리를 사용하기 때문에 꼭 필요한 경우에만 생성하자.
+        HttpSession session = request.getSession(false);
+        if (session == null) return "home";
+
+        Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        if(loginMember == null) return "home";
+
+        model.addAttribute("member", loginMember);
+        return "loginHome";
+    }
+
+    //@GetMapping("/")
     public String homeLoginV2(HttpServletRequest request, Model model) {
         // 세션 관리자에 저장된 회원 정보 조회
         Member member = (Member) sessionManager.getSession(request);

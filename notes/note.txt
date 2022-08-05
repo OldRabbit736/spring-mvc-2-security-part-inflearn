@@ -14,3 +14,29 @@
     - 클라이언트가 요청한 sessionId 쿠키의 값으로 세션 저장소에 보관한 값 조회
 - 세션 만료
     - 클라이언트가 요청한 sessionId 쿠키의 값으로 세션 저장소에 보관한 sessionId와 값 제거
+
+서블릿 HTTP 세션
+- 세션이라는 개념은 대부분의 웹 어플리케이션에 필요한 것이다. 어쩌면 웹이등장하면서 부터 나온 문제이다.
+- 서블릿은 세션을 위해 HttpSession 이라는 기능을 제공하는데, 지금까지 나온 문제들을 해결해준다.
+
+HttpSession
+- 서블릿 컨테이너가 클라이언트(웹 브라우저)를 식별할 수 있는 식별자를 자동으로 제공해 주는데,
+  이름은 JSESSIONID 이다.
+- 이 값을 Set-Cookie를 통해 쿠키로서 클라이언트에 심는다.
+- 추후 요청에 들어있는 JSESSIONID 쿠키를 통해 클라이언트를 식별할 수 있다.
+- 하지만 이 JSESSIONID 쿠키는 자동으로 생성되지 않는다.
+  HttpServletRequest를 통해 HttpSession을 생성하면 쿠키를 생성하게 된다.
+  그러면 쿠키가 Set-Cookie를 통해 클라이언트에게 전달되고,
+  클라이언트는 추후 요청에서 해당 쿠키를 포함하게 된다.
+  (Set-Cookie: JSESSIONID=CAC349899D7067BE7AD7FA540104F22A; Path=/; HttpOnly)
+- 그러면 서블릿 컨테이너는 자동으로 해당 JSESSIONID를 이용해
+  연관된 HttpSession 객체를 HttpServletRequest에 세팅해 놓는다.
+- 컨트롤러 등에서는 해당 HttpSession에서 attribute를 가져오거나 세팅할 수 있다.
+- 로그아웃을 할 때 HttpSession을 invalid 하는 메서드를 호출하면 서버 내부에 관리되고 있던 해당 Session 기록을 삭제한다.
+  클라이언트에는 따로 조치를 취하지 않는다.
+- HttpSession 인터페이스 정의 파일에 적혀 있는 내용
+    - Provides a way to identify a user across more than one page request
+      or visit to a Web site and to store information about that user.
+      The servlet container uses this interface to create a session between
+      an HTTP client and an HTTP server.
+-
