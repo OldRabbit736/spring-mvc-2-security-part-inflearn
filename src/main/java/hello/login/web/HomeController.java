@@ -2,6 +2,7 @@ package hello.login.web;
 
 import hello.login.domain.member.Member;
 import hello.login.domain.member.MemberRepository;
+import hello.login.web.argumentresolver.Login;
 import hello.login.web.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,15 @@ public class HomeController {
 
     // 로그인 정보까지 처리 되는 홈 화면
     @GetMapping("/")
+    public String homeLoginVArgumentResolver(@Login Member loginMember, Model model) {
+
+        if (loginMember == null) return "home";
+
+        model.addAttribute("member", loginMember);
+        return "loginHome";
+    }
+
+    //@GetMapping("/")
     public String homeLoginV3Spring(
             // 이미 로그인 된 사용자를 찾을 때 이렇게 사용. 세션은 생성하지 않는다.
             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
